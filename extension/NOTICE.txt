@@ -1,0 +1,15 @@
+Kindle Draughts
+===============
+
+Unofficial Kindle-friendly draughts/checkers game using a Kindle-specific
+GTK2/Cairo interface and assets from Draughts by Thiago Fernandes:
+
+  https://github.com/tobagin/Draughts
+
+Draughts is licensed under the GNU GPL version 3 or later.
+
+This package is not an official Draughts project release, is not part of the
+original GNOME Games package, and is not an official GnomeGames4Kindle release.
+
+The project is distributed with GPL-family license texts in LICENSES/.
+Runtime libraries bundled in this package keep their own upstream licenses.

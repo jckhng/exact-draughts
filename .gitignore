@@ -1,0 +1,14 @@
+# Native build outputs
+/kindle-draughts
+/smoke-test
+*.o
+
+# Generated package tree
+/dist/
+/release/extensions/
+/release/documents/
+/release/kindle-draughts-extension/
+
+# Editor/OS noise
+*~
+.DS_Store

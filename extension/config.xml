@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension>
+  <information>
+    <name>Kindle Draughts</name>
+    <id>kindle_draughts</id>
+    <version>0.1.0</version>
+  </information>
+  <menus>
+    <menu type="json" dynamic="true">menu.json</menu>
+  </menus>
+</extension>
