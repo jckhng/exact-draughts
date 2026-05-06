@@ -16,8 +16,10 @@
 #include "draughts_engine.h"
 
 #define KINDLE_WINDOW_TITLE "L:A_N:application_ID:kindledraughts_PC:N_O:URL"
+#define KINDLE_WINDOW_TITLE_TOPBAR "L:A_N:application_PC:T_ID:kindledraughts_O:URL"
 #define LOG_PATH "/mnt/us/kindle-draughts.log"
-#define SAVE_PATH "/mnt/us/kindle-draughts.save"
+#define SAVE_PATH "/mnt/us/extensions/kindle-draughts/kindle-draughts.save"
+#define LEGACY_SAVE_PATH "/mnt/us/kindle-draughts.save"
 #define SAVE_MAGIC "KDRAUGHTS2"
 #define KINDLE_APP_WIDTH 1072
 #define KINDLE_APP_HEIGHT 1448
@@ -29,6 +31,13 @@ typedef enum {
     MODE_AI_DEMO = 3
 } AppMode;
 
+static const char *kindle_window_title(void)
+{
+    const char *value = g_getenv("KINDLE_SHOW_TOPBAR");
+    return (value != NULL && value[0] != '\0' && strcmp(value, "0") != 0) ? KINDLE_WINDOW_TITLE_TOPBAR
+                                                                          : KINDLE_WINDOW_TITLE;
+}
+
 typedef struct {
     GtkWidget *window;
     GtkWidget *board;
@@ -36,6 +45,8 @@ typedef struct {
     GtkWidget *red_score;
     GtkWidget *black_score;
     GtkWidget *moves_label;
+    GtkWidget *history_sidebar;
+    GtkWidget *history_toggle_button;
     GtkWidget *mode_combo;
     GtkWidget *variant_combo;
     GtkWidget *level_combo;
@@ -59,6 +70,7 @@ typedef struct {
     GdkPixbuf *black_man;
     GdkPixbuf *black_king;
     char message[180];
+    gboolean history_visible;
 } AppState;
 
 static AppState app;
@@ -72,6 +84,23 @@ static gboolean is_ai_turn(void);
 static gboolean ai_timeout(gpointer data);
 static void update_ui(void);
 static void new_game(void);
+
+static void toggle_history_cb(GtkWidget *widget, gpointer data)
+{
+    (void)widget;
+    (void)data;
+
+    app.history_visible = !app.history_visible;
+    if (app.history_visible) {
+        gtk_widget_show(app.history_sidebar);
+        gtk_button_set_label(GTK_BUTTON(app.history_toggle_button), "Hide Moves");
+    } else {
+        gtk_widget_hide(app.history_sidebar);
+        gtk_button_set_label(GTK_BUTTON(app.history_toggle_button), "Show Moves");
+    }
+    gtk_widget_queue_resize(app.board);
+    gtk_widget_queue_draw(app.board);
+}
 
 static void app_log(const char *message)
 {
@@ -197,6 +226,32 @@ static gboolean is_viewing_latest(void)
 static DraughtsPiece viewed_piece_at(int x, int y)
 {
     return app.game.history[current_view_ply()][y][x];
+}
+
+static gboolean last_move_cells(int *from_x, int *from_y, int *to_x, int *to_y)
+{
+    int ply = current_view_ply();
+    const char *move;
+    int fy;
+    int ty;
+
+    if (ply <= 0 || ply > app.game.move_count)
+        return FALSE;
+    move = app.game.moves[ply - 1];
+    if (strlen(move) < 5)
+        return FALSE;
+    fy = move[1] - '0';
+    ty = move[4] - '0';
+    if (move[0] < 'a' || move[0] >= 'a' + app.game.size ||
+        move[3] < 'a' || move[3] >= 'a' + app.game.size ||
+        fy < 1 || fy > app.game.size || ty < 1 || ty > app.game.size)
+        return FALSE;
+
+    *from_x = move[0] - 'a';
+    *from_y = app.game.size - fy;
+    *to_x = move[3] - 'a';
+    *to_y = app.game.size - ty;
+    return TRUE;
 }
 
 static int board_size(void)
@@ -348,6 +403,11 @@ static gboolean board_expose(GtkWidget *widget, GdkEventExpose *event, gpointer 
     int oy;
     int x;
     int y;
+    int last_from_x = -1;
+    int last_from_y = -1;
+    int last_to_x = -1;
+    int last_to_y = -1;
+    gboolean has_last;
 
     (void)event;
     (void)data;
@@ -358,6 +418,7 @@ static gboolean board_expose(GtkWidget *widget, GdkEventExpose *event, gpointer 
     board_px = cell * board_size();
     ox = (allocation.width - board_px) / 2;
     oy = (allocation.height - board_px) / 2;
+    has_last = last_move_cells(&last_from_x, &last_from_y, &last_to_x, &last_to_y);
 
     cairo_set_source_rgb(cr, 0.98, 0.98, 0.95);
     cairo_paint(cr);
@@ -378,6 +439,16 @@ static gboolean board_expose(GtkWidget *widget, GdkEventExpose *event, gpointer 
             cairo_set_line_width(cr, 1.0);
             cairo_rectangle(cr, px + 0.5, py + 0.5, cell - 1, cell - 1);
             cairo_stroke(cr);
+
+            if (has_last && ((x == last_from_x && y == last_from_y) || (x == last_to_x && y == last_to_y))) {
+                gboolean current = x == last_to_x && y == last_to_y;
+                cairo_rectangle(cr, px + 4, py + 4, cell - 8, cell - 8);
+                cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, current ? 0.20 : 0.10);
+                cairo_fill_preserve(cr);
+                cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+                cairo_set_line_width(cr, current ? 4.0 : 2.5);
+                cairo_stroke(cr);
+            }
 
             if (is_viewing_latest() && x == app.selected_x && y == app.selected_y) {
                 cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
@@ -403,8 +474,19 @@ static gboolean board_expose(GtkWidget *widget, GdkEventExpose *event, gpointer 
                 cairo_stroke(cr);
             }
 
-            if (viewed_piece_at(x, y) != DRAUGHTS_EMPTY)
+            if (viewed_piece_at(x, y) != DRAUGHTS_EMPTY) {
                 draw_piece(cr, viewed_piece_at(x, y), px, py, cell);
+                if (has_last && x == last_to_x && y == last_to_y) {
+                    cairo_new_path(cr);
+                    cairo_arc(cr, px + cell / 2.0, py + cell / 2.0, cell * 0.43, 0, 2 * G_PI);
+                    cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+                    cairo_set_line_width(cr, 5.0);
+                    cairo_stroke_preserve(cr);
+                    cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
+                    cairo_set_line_width(cr, 2.0);
+                    cairo_stroke(cr);
+                }
+            }
         }
     }
 
@@ -616,6 +698,8 @@ static void load_cb(GtkWidget *widget, gpointer data)
     (void)data;
 
     f = fopen(SAVE_PATH, "rb");
+    if (!f)
+        f = fopen(LEGACY_SAVE_PATH, "rb");
     if (!f) {
         set_message("No saved game found.");
         update_ui();
@@ -836,8 +920,9 @@ int main(int argc, char **argv)
     load_assets();
 
     app.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(app.window), KINDLE_WINDOW_TITLE);
+    gtk_window_set_title(GTK_WINDOW(app.window), kindle_window_title());
     gtk_window_set_default_size(GTK_WINDOW(app.window), KINDLE_APP_WIDTH, KINDLE_APP_HEIGHT);
+    gtk_window_set_resizable(GTK_WINDOW(app.window), TRUE);
     g_signal_connect(app.window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     g_signal_connect(app.window, "key-press-event", G_CALLBACK(key_press), NULL);
 
@@ -875,6 +960,9 @@ int main(int argc, char **argv)
     app.level_combo = combo_with_items(levels, app.ai_level);
     gtk_box_pack_start(GTK_BOX(options_row), app.level_combo, FALSE, FALSE, 0);
     g_signal_connect(app.level_combo, "changed", G_CALLBACK(level_changed), NULL);
+    app.history_toggle_button = gtk_button_new_with_label("Hide Moves");
+    gtk_box_pack_start(GTK_BOX(options_row), app.history_toggle_button, FALSE, FALSE, 0);
+    g_signal_connect(app.history_toggle_button, "clicked", G_CALLBACK(toggle_history_cb), NULL);
 
     content = gtk_hbox_new(FALSE, 12);
     gtk_box_pack_start(GTK_BOX(root), content, TRUE, TRUE, 0);
@@ -884,9 +972,11 @@ int main(int argc, char **argv)
     gtk_widget_add_events(app.board, GDK_BUTTON_PRESS_MASK);
     g_signal_connect(app.board, "expose-event", G_CALLBACK(board_expose), NULL);
     g_signal_connect(app.board, "button-press-event", G_CALLBACK(board_button), NULL);
-    gtk_box_pack_start(GTK_BOX(content), app.board, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(content), app.board, TRUE, TRUE, 0);
 
     sidebar = gtk_vbox_new(FALSE, 8);
+    app.history_sidebar = sidebar;
+    app.history_visible = TRUE;
     gtk_widget_set_size_request(sidebar, 280, -1);
     gtk_box_pack_start(GTK_BOX(content), sidebar, FALSE, TRUE, 0);
 
