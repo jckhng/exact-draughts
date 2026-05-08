@@ -1,5 +1,5 @@
 /*
- * Kindle Draughts
+ * Exact Draughts
  * SPDX-License-Identifier: GPL-3.0-or-later
  *
  * Unofficial Kindle-focused adaptation using artwork from Draughts by
@@ -15,11 +15,11 @@
 
 #include "draughts_engine.h"
 
-#define KINDLE_WINDOW_TITLE "L:A_N:application_ID:kindledraughts_PC:N_O:URL"
-#define KINDLE_WINDOW_TITLE_TOPBAR "L:A_N:application_PC:T_ID:kindledraughts_O:URL"
-#define LOG_PATH "/mnt/us/kindle-draughts.log"
-#define SAVE_PATH "/mnt/us/extensions/kindle-draughts/kindle-draughts.save"
-#define LEGACY_SAVE_PATH "/mnt/us/kindle-draughts.save"
+#define KINDLE_WINDOW_TITLE "L:A_N:application_ID:exactdraughts_PC:N_O:URL"
+#define KINDLE_WINDOW_TITLE_TOPBAR "L:A_N:application_PC:T_ID:exactdraughts_O:URL"
+#define LOG_PATH "/mnt/us/exact-draughts.log"
+#define SAVE_PATH "/mnt/us/extensions/exact-draughts/exact-draughts.save"
+#define LEGACY_SAVE_PATH "/mnt/us/exact-draughts.save"
 #define SAVE_MAGIC "KDRAUGHTS2"
 #define KINDLE_APP_WIDTH 1072
 #define KINDLE_APP_HEIGHT 1448
@@ -175,7 +175,7 @@ static GdkPixbuf *load_piece_asset(const char *name)
         g_error_free(error);
 
     error = NULL;
-    snprintf(path, sizeof(path), "/mnt/us/extensions/kindle-draughts/assets/%s", name);
+    snprintf(path, sizeof(path), "/mnt/us/extensions/exact-draughts/assets/%s", name);
     pixbuf = gdk_pixbuf_new_from_file(path, &error);
     if (!pixbuf && error) {
         app_log(error->message);
@@ -931,7 +931,7 @@ int main(int argc, char **argv)
     gtk_container_add(GTK_CONTAINER(app.window), root);
 
     title = gtk_label_new(NULL);
-    gtk_label_set_markup(GTK_LABEL(title), "<b>Kindle Draughts</b>");
+    gtk_label_set_markup(GTK_LABEL(title), "<b>Exact Draughts</b>");
     gtk_box_pack_start(GTK_BOX(root), title, FALSE, FALSE, 0);
     app_apply_high_contrast(title);
 

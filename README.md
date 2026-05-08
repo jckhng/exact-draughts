@@ -1,16 +1,16 @@
-# Kindle Draughts
+# Exact Draughts
 
 A practical Kindle-friendly draughts/checkers app using GTK2/Cairo and the same
 Mesquite/KUAL packaging approach as Kindle GlChess.
 
-Kindle Draughts is an unofficial Kindle-focused adaptation using artwork from
+Exact Draughts is an unofficial Kindle-focused adaptation using artwork from
 Draughts by Thiago Fernandes (`tobagin`), <https://github.com/tobagin/Draughts>.
 It replaces the original desktop application shell with a compact native Kindle
 interface for jailbroken Kindle devices.
 
 ## Screenshot
 
-![Kindle Draughts screenshot](kindle-draught.png)
+![Exact Draughts screenshot](exact-draughts.png)
 
 ## Features
 
@@ -32,20 +32,20 @@ interface for jailbroken Kindle devices.
 Use the prebuilt extension package:
 
 ```text
-release/kindle-draughts-extension.zip
+release/exact-draughts-extension.zip
 ```
 
 Unzip it at the Kindle USB-storage root so it creates:
 
 ```text
-/mnt/us/extensions/kindle-draughts
-/mnt/us/documents/shortcut_kindledraughts.sh
+/mnt/us/extensions/exact-draughts
+/mnt/us/documents/shortcut_exactdraughts.sh
 ```
 
 Launch from KUAL:
 
 ```text
-KUAL -> Kindle Draughts -> Kindle Draughts
+KUAL -> Exact Draughts -> Exact Draughts
 ```
 
 ## Build

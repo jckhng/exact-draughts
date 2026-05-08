@@ -1,8 +1,8 @@
 /*
- * Kindle Draughts rules engine
+ * Exact Draughts rules engine
  * SPDX-License-Identifier: GPL-3.0-or-later
  *
- * Kindle-specific implementation for the Kindle Draughts adaptation. Project
+ * Kindle-specific implementation for the Exact Draughts adaptation. Project
  * attribution and bundled artwork provenance are documented in
  * docs/PROVENANCE.md.
  */

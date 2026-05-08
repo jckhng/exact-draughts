@@ -1,10 +1,10 @@
 /*
- * Kindle Draughts rules engine
+ * Exact Draughts rules engine
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KINDLE_DRAUGHTS_ENGINE_H
-#define KINDLE_DRAUGHTS_ENGINE_H
+#ifndef EXACT_DRAUGHTS_ENGINE_H
+#define EXACT_DRAUGHTS_ENGINE_H
 
 #include <glib.h>
 

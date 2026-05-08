@@ -2,8 +2,8 @@
 set -eu
 
 ROOT="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
-CONTAINER="${KINDLE_DRAUGHTS_DOCKER_CONTAINER:-kindle-draughts-armhf-builder}"
-IMAGE="${KINDLE_DRAUGHTS_DOCKER_IMAGE:-kindle-draughts-armhf-build:bullseye}"
+CONTAINER="${EXACT_DRAUGHTS_DOCKER_CONTAINER:-exact-draughts-armhf-builder}"
+IMAGE="${EXACT_DRAUGHTS_DOCKER_IMAGE:-exact-draughts-armhf-build:bullseye}"
 
 if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
     "$ROOT/docker_build_image.sh" >/dev/null
@@ -17,8 +17,8 @@ else
     docker run -d \
         --platform linux/arm/v7 \
         --name "$CONTAINER" \
-        -v "$ROOT:/src/kindle-draughts" \
-        -w /src/kindle-draughts \
+        -v "$ROOT:/src/exact-draughts" \
+        -w /src/exact-draughts \
         "$IMAGE" \
         sleep infinity >/dev/null
 fi

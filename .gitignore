@@ -1,5 +1,5 @@
 # Native build outputs
-/kindle-draughts
+/exact-draughts
 /smoke-test
 *.o
 
@@ -8,7 +8,7 @@
 /release/
 /release/extensions/
 /release/documents/
-/release/kindle-draughts-extension/
+/release/exact-draughts-extension/
 
 # Editor/OS noise
 *~
