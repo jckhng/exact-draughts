@@ -6,9 +6,9 @@ Build the ARM Kindle binary and extension package with:
 ./docker_rebuild.sh
 ```
 
-The script starts the persistent `kindle-draughts-armhf-builder` container,
-builds `kindle-draughts`, runs `smoke-test`, and writes:
+The script starts the persistent `exact-draughts-armhf-builder` container,
+builds `exact-draughts`, runs `smoke-test`, and writes:
 
 ```text
-dist/kindle-draughts-extension.zip
+dist/exact-draughts-extension.zip
 ```

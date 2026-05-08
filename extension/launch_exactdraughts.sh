@@ -1,11 +1,11 @@
 #!/bin/sh
 
-EXT_DIR="/mnt/us/extensions/kindle-draughts"
-APP_BIN="$EXT_DIR/bin/armhf/kindle-draughts"
-APP_LOG="/mnt/us/kindle-draughts.log"
-APP_TITLE="Kindle Draughts"
+EXT_DIR="/mnt/us/extensions/exact-draughts"
+APP_BIN="$EXT_DIR/bin/armhf/exact-draughts"
+APP_LOG="/mnt/us/exact-draughts.log"
+APP_TITLE="Exact Draughts"
 APP_LOADER="$EXT_DIR/lib/armhf/ld-linux-armhf.so.3"
-RUNTIME_MODE="${KINDLE_DRAUGHTS_RUNTIME:-auto}"
+RUNTIME_MODE="${EXACT_DRAUGHTS_RUNTIME:-auto}"
 
 if [ ! -x "$APP_BIN" ]; then
     echo "$APP_TITLE binary not found: $APP_BIN" >"$APP_LOG"
@@ -58,7 +58,7 @@ try_launch() {
     if kill -0 "$pid" 2>/dev/null || pgrep -f "$APP_BIN" >/dev/null 2>&1; then
         echo "Started runtime: $mode pid=$pid" >>"$APP_LOG"
         if command -v xwininfo >/dev/null 2>&1; then
-            DISPLAY=:0 xwininfo -root -tree 2>/dev/null | grep -i "draughts\\|kindledraughts\\|kindle" >>"$APP_LOG" 2>&1 || true
+            DISPLAY=:0 xwininfo -root -tree 2>/dev/null | grep -i "draughts\\|exactdraughts\\|kindle" >>"$APP_LOG" 2>&1 || true
         fi
         exit 0
     fi

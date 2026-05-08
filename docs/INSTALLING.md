@@ -1,15 +1,15 @@
 # Installing
 
-Unzip `kindle-draughts-extension.zip` at the Kindle USB-storage root. It should
+Unzip `exact-draughts-extension.zip` at the Kindle USB-storage root. It should
 create:
 
 ```text
-/mnt/us/extensions/kindle-draughts
-/mnt/us/documents/shortcut_kindledraughts.sh
+/mnt/us/extensions/exact-draughts
+/mnt/us/documents/shortcut_exactdraughts.sh
 ```
 
 Launch with KUAL:
 
 ```text
-KUAL -> Kindle Draughts -> Kindle Draughts
+KUAL -> Exact Draughts -> Exact Draughts
 ```

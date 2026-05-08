@@ -1,4 +1,4 @@
-Kindle Draughts
+Exact Draughts
 ===============
 
 Unofficial Kindle-friendly draughts/checkers game using a Kindle-specific

@@ -1,6 +1,6 @@
 # Provenance And Licensing
 
-Kindle Draughts is an unofficial Kindle-focused adaptation of draughts/checkers
+Exact Draughts is an unofficial Kindle-focused adaptation of draughts/checkers
 using artwork from the open source Draughts project by Thiago Fernandes
 (`tobagin`):
 

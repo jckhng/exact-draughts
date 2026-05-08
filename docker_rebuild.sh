@@ -5,18 +5,18 @@ ROOT="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 CONTAINER="$("$ROOT/docker_start_builder.sh" | tail -n 1)"
 UID_HOST="$(id -u)"
 GID_HOST="$(id -g)"
-MAKE_TARGETS="${KINDLE_DRAUGHTS_MAKE_TARGETS:-kindle-draughts smoke-test}"
-DO_PACKAGE="${KINDLE_DRAUGHTS_PACKAGE:-1}"
+MAKE_TARGETS="${EXACT_DRAUGHTS_MAKE_TARGETS:-exact-draughts smoke-test}"
+DO_PACKAGE="${EXACT_DRAUGHTS_PACKAGE:-1}"
 
-docker exec "$CONTAINER" chown -R "$UID_HOST:$GID_HOST" /src/kindle-draughts
+docker exec "$CONTAINER" chown -R "$UID_HOST:$GID_HOST" /src/exact-draughts
 docker exec --user "$UID_HOST:$GID_HOST" "$CONTAINER" /bin/sh -lc "make $MAKE_TARGETS && ./smoke-test"
 
 if [ "$DO_PACKAGE" = "1" ]; then
-    KINDLE_DRAUGHTS_DOCKER_CONTAINER="$CONTAINER" "$ROOT/package_extension.sh"
+    EXACT_DRAUGHTS_DOCKER_CONTAINER="$CONTAINER" "$ROOT/package_extension.sh"
 fi
 
 echo "Builder container: $CONTAINER"
-echo "Binary: $ROOT/kindle-draughts"
+echo "Binary: $ROOT/exact-draughts"
 if [ "$DO_PACKAGE" = "1" ]; then
-    echo "Package: $ROOT/dist/kindle-draughts-extension.zip"
+    echo "Package: $ROOT/dist/exact-draughts-extension.zip"
 fi

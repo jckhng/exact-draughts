@@ -1,5 +1,5 @@
 /*
- * Kindle Draughts smoke tests
+ * Exact Draughts smoke tests
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
