@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#1a1a1a"/>
+  <!-- Checkerboard 4x4 -->
+  <rect x="68" y="68" width="94" height="94" fill="#ddd"/>
+  <rect x="162" y="68" width="94" height="94" fill="#555"/>
+  <rect x="256" y="68" width="94" height="94" fill="#ddd"/>
+  <rect x="350" y="68" width="94" height="94" fill="#555"/>
+  <rect x="68" y="162" width="94" height="94" fill="#555"/>
+  <rect x="162" y="162" width="94" height="94" fill="#ddd"/>
+  <rect x="256" y="162" width="94" height="94" fill="#555"/>
+  <rect x="350" y="162" width="94" height="94" fill="#ddd"/>
+  <rect x="68" y="256" width="94" height="94" fill="#ddd"/>
+  <rect x="162" y="256" width="94" height="94" fill="#555"/>
+  <rect x="256" y="256" width="94" height="94" fill="#ddd"/>
+  <rect x="350" y="256" width="94" height="94" fill="#555"/>
+  <rect x="68" y="350" width="94" height="94" fill="#555"/>
+  <rect x="162" y="350" width="94" height="94" fill="#ddd"/>
+  <rect x="256" y="350" width="94" height="94" fill="#555"/>
+  <rect x="350" y="350" width="94" height="94" fill="#ddd"/>
+  <!-- Pieces -->
+  <circle cx="209" cy="115" r="36" fill="#f0f0f0" stroke="#888" stroke-width="4"/>
+  <circle cx="397" cy="115" r="36" fill="#f0f0f0" stroke="#888" stroke-width="4"/>
+  <circle cx="115" cy="303" r="36" fill="#222" stroke="#888" stroke-width="4"/>
+  <circle cx="303" cy="303" r="36" fill="#222" stroke="#888" stroke-width="4"/>
+</svg>
